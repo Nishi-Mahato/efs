@@ -1,0 +1,58 @@
+{% extends 'portfolio/base.html' %}
+{% block content %}
+<div class="container">
+    <div class="row justify-content-md-center">
+        <div class="col-md-12 ">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title">Welcome!</div>
+                    <p class="card-text">Eagle Financial Services, your Midwest Financial Services Partner</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-md-center">
+        <h2><u>Customer Information</u></h2>
+    </div>
+    <div>
+        <table class="table table-hover table-striped table-bordered text-center">
+            <thead>
+            <tr class="bg-warning">
+                <th>Customer Number</th>
+                <th>Name</th>
+                <th>Address</th>
+                <th>City</th>
+                <th>State</th>
+                <th>Zip</th>
+                <th>Primary Email</th>
+                <th>Cell Phone</th>
+                <th colspan="3">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for customer in customers %}
+                <tr>
+                    <td>{{ customer.cust_number }}</td>
+                    <td>{{ customer.name }}</td>
+                    <td>{{ customer.address }}</td>
+                    <td>{{ customer.city }}</td>
+                    <td>{{ customer.state }}</td>
+                    <td>{{ customer.zipcode }}</td>
+                    <td>{{ customer.email }}</td>
+                    <td>{{ customer.cell_phone }}</td>
+                    <td><a href="{% url 'portfolio:customer_edit' pk=customer.pk %}" class="btn btn-warning">Edit</a>
+                     <td><a href="{% url 'portfolio:customer_delete' pk=customer.pk %}"
+                           onclick="return confirm('Are you sure you want to delete?')"
+                           class="btn btn-danger">Delete</a>
+                    </td>
+                    <td><a href=""
+                           class="btn btn-primary">Portfolio</a>
+
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+</div>
+{% endblock %}

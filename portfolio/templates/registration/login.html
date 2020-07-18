@@ -1,0 +1,29 @@
+{% extends "portfolio/base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}Log-in{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-md-center">
+    <div class="col-md-6"></div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h1>Log-in</h1>
+                    {% if form.errors %}
+                        <p>Your username and password didn't match. Please try again.</p>
+                    {% else %}
+                        <p>Please, use the following form to log-in. If you don't have an account <a href="{% url 'portfolio:register' %}">register here</a></p>
+                    {% endif %}
+                    <form action="{% url 'login' %}" method="post" novalidate>
+                        {{ form|crispy }}
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{{ next }}">
+                        <input type="submit" class="btn btn-warning" value="Log-in">
+                        <a href="{% url 'password_reset' %}" class="btn btn-link">Forgotten your password?</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    <div class="col-md-4"></div>
+    </div>
+{% endblock %}

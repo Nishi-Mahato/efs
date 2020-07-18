@@ -1,0 +1,59 @@
+{% extends 'portfolio/base.html' %}
+{% block content %}
+
+<div class="container">
+    <div class="row justify-content-md-center">
+        <div class="col-md-12 ">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title">Welcome!</div>
+                    <p class="card-text">
+                        Eagle Financial Services, your Midwest Financial Services Partner.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <h2><u>Stocks Information</u></h2>
+    </div>
+    <div>
+        <table class="table table-hover table-striped table-bordered text-center" >
+            <thead>
+            <tr class="bg-warning">
+                <th>Customer number</th>
+                <th>Symbol</th>
+                <th>Name</th>
+                <th>Shares</th>
+                <th>Purchase Price</th>
+                <th>Purchase Date</th>
+                <th colspan="3">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for stock in stocks %}
+                <tr>
+                    <td>{{ stock.customer }}</td>
+                    <td>{{ stock.symbol }}</td>
+                    <td>{{ stock.name }}</td>
+                    <td>{{ stock.shares }}</td>
+                    <td>{{ stock.purchase_price }}</td>
+                    <td>{{ stock.purchase_date }}</td>
+                    <td><a href="{% url 'portfolio:stock_edit' pk=stock.pk %}"
+                           class="btn btn-warning">Edit</a></td>
+                    <td><a href="{% url 'portfolio:stock_delete' pk=stock.pk %}"
+                    onclick="return confirm('Are you sure you want to delete?')"
+                    class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+     <div class="row justify-content-md-center">
+            <a href="{% url 'portfolio:stock_new' %}" class="row"><span
+                    class="btn btn-warning">Add Stock</span></a>
+     </div>
+    </div>
+</div>
+{% endblock %}
