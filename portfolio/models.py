@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
-import request
+import requests
 
 
 # Create your models here.
@@ -59,7 +59,7 @@ class Stock(models.Model):
     symbol = models.CharField(max_length=10)
     name = models.CharField(max_length=50)
     shares = models.DecimalField(max_digits=10, decimal_places=1)
-    purchase_price = models.DecimalField(max_digits=10, decimal_places=2)
+    purchase_price = models.DecimalField(max_digits=10, decimal_places=1)
     purchase_date = models.DateField(default=timezone.now, blank=True, null=True)
 
     def created(self):
@@ -71,3 +71,27 @@ class Stock(models.Model):
 
     def initial_stock_value(self):
         return self.shares * self.purchase_price
+
+    def current_stock_price(self):
+        symbol_f = str(self.symbol)
+        main_api = 'https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol='
+        api_key = '&interval=1sec&apikey=5H600908C5T6RC6S!!'
+        url = main_api + symbol_f + api_key
+        json_data = requests.get(url).json()
+        open_price = float(json_data["Global Quote"]["02. open"])
+        # print(open_price)
+        share_value = open_price
+        return float(share_value)
+
+    def current_stock_value(self):
+        return float(self.current_stock_price()) * float(self.shares)
+
+
+class Mails(models.Model):
+    email = models.EmailField()
+    subject = models.CharField(max_length=1000)
+    message = models.CharField(max_length=20000)
+    document = models.FileField(upload_to='documents/')
+
+    def __str__(self):
+        return self.email

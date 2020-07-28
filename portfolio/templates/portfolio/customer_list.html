@@ -12,7 +12,7 @@
         </div>
     </div>
     <div class="row justify-content-md-center">
-        <h2><u>Customer Information</u></h2>
+        <h2 style="padding-left: 350Px;"><u>Customer Information</u></h2>
     </div>
     <div>
         <table class="table table-hover table-striped table-bordered text-center">
@@ -40,14 +40,16 @@
                     <td>{{ customer.zipcode }}</td>
                     <td>{{ customer.email }}</td>
                     <td>{{ customer.cell_phone }}</td>
-                    <td><a href="{% url 'portfolio:customer_edit' pk=customer.pk %}" class="btn btn-warning">Edit</a>
-                     <td><a href="{% url 'portfolio:customer_delete' pk=customer.pk %}"
+                    <td><a href="{% url 'portfolio:customer_edit' pk=customer.pk %}"
+                           class="btn btn-warning">Edit</a><br><br><a href="{% url 'portfolio:summary' pk=customer.pk %}"
+                           class="btn btn-warning">Summary</a></td>
+                    <td><a href="{% url 'portfolio:customer_delete' pk=customer.pk %}"
                            onclick="return confirm('Are you sure you want to delete?')"
-                           class="btn btn-danger">Delete</a>
-                    </td>
-                    <td><a href=""
-                           class="btn btn-primary">Portfolio</a>
-
+                           class="btn btn-danger">Delete</a><br><br><a href="{% url 'portfolio:email' pk=customer.pk %}"
+                           class="btn btn-danger">Send Email</a></td>
+                    <td><a href="{% url 'portfolio:customer_portfolio' pk=customer.pk %}"
+                           class="btn btn-primary">Portfolio</a><br><br><a href="{% url 'portfolio:portfolio_pdf' pk=customer.pk %}"
+                           class="btn btn-primary">Portfolio PDF</a></td>
                 </tr>
             {% endfor %}
             </tbody>

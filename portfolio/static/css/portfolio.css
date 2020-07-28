@@ -6,14 +6,10 @@ h1 a {
 }
 
 body {
-    background-image: url('../images/bg1.jpeg');
+    background-image: url('../images/bg4.png');
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
     font-family: "Comic Sans MS", serif;
     font-size: medium;
-}
-
-.table {
-
 }

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Customer, Stock, Investment
+from .models import Customer, Stock, Investment, Mails
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
@@ -40,3 +40,12 @@ class RegisterForm(UserCreationForm):
         if cd['password1'] != cd['password2']:
             raise forms.ValidationError('Passwords don\'t match.')
         return cd['password2']
+
+
+class EmailForm(forms.ModelForm):
+    email = forms.EmailField(max_length=200,widget=forms.TextInput(attrs={'class': "form-control",'id': "clientemail"}))
+    message = forms.CharField( widget=forms.Textarea(attrs={'class': "form-control"}))
+    subject = forms.CharField( widget=forms.TextInput(attrs={'class': "form-control"}))
+    class Meta:
+        model = Mails
+        fields = ('email','subject','message','document',)

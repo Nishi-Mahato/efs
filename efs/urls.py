@@ -25,8 +25,8 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('portfolio.urls')),
-    #url(r'^accounts/login/$', LoginView.as_view(template_name='registration/login.html'), name="login"),
-    #url(r'^accounts/logout/$', LogoutView.as_view(), LogoutView.next_page, name="logout"),
+    # url(r'^accounts/login/$', LoginView.as_view(template_name='registration/login.html'), name="login"),
+    # url(r'^accounts/logout/$', LogoutView.as_view(), LogoutView.next_page, name="logout"),
     # url(r'^accounts/login/$', views.login, name='login'),
     # url(r'^accounts/logout/$', views.logout, name='logout', kwargs={'next_page': '/'}),
 
