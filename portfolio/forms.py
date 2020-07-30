@@ -19,7 +19,8 @@ class StockForm(forms.ModelForm):
 class InvestmentForm(forms.ModelForm):
     class Meta:
         model = Investment
-        fields = ('customer', 'category', 'description', 'acquired_value', 'acquired_date', 'recent_value','recent_date',)
+        fields = (
+            'customer', 'category', 'description', 'acquired_value', 'acquired_date', 'recent_value', 'recent_date',)
 
 
 class RegisterForm(UserCreationForm):
@@ -33,7 +34,7 @@ class RegisterForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ('username','email', 'first_name','last_name','password1','password2')
+        fields = ('username', 'email', 'first_name', 'last_name', 'password1', 'password2')
 
     def clean_password2(self):
         cd = self.cleaned_data
@@ -43,9 +44,11 @@ class RegisterForm(UserCreationForm):
 
 
 class EmailForm(forms.ModelForm):
-    email = forms.EmailField(max_length=200,widget=forms.TextInput(attrs={'class': "form-control",'id': "clientemail"}))
-    message = forms.CharField( widget=forms.Textarea(attrs={'class': "form-control"}))
-    subject = forms.CharField( widget=forms.TextInput(attrs={'class': "form-control"}))
+    email = forms.EmailField(max_length=200,
+                             widget=forms.TextInput(attrs={'class': "form-control", 'id': "clientemail"}))
+    message = forms.CharField(widget=forms.Textarea(attrs={'class': "form-control"}))
+    subject = forms.CharField(widget=forms.TextInput(attrs={'class': "form-control"}))
+
     class Meta:
         model = Mails
-        fields = ('email','subject','message','document',)
+        fields = ('email', 'subject', 'message', 'document',)
