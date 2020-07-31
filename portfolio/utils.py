@@ -1,11 +1,9 @@
 from io import BytesIO
-
 from django.http import HttpResponse
 from django.template.loader import get_template
 
 # pisa is a html2pdf converter using the ReportLab Toolkit,
 # the HTML5lib and pyPdf.
-
 from xhtml2pdf import pisa
 
 

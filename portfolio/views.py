@@ -11,16 +11,17 @@ from rest_framework.response import Response
 from rest_framework import status
 from .serializers import CustomerSerializer
 from decimal import *
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotFound
 from django.views.generic import View
 from django.contrib.auth.models import User
 from django.template.loader import get_template
 from .fusioncharts import FusionCharts
-from .utils import render_to_pdf
+from portfolio.utils import render_to_pdf
 # email
 from django.core.files.storage import FileSystemStorage
 from django.core.mail import send_mail
 from django.core.mail import EmailMessage
+
 now = timezone.now()
 
 
@@ -202,7 +203,7 @@ def portfolio(request, pk):
     overall_stocks_results = Decimal(sum_current_stocks_value) - Decimal(sum_of_initial_stock_value)
     # print(overall_stocks_results)
 
-    return render(request, 'portfolio/customer_portfolio.html', {'customers': customers,
+    return render(request, 'portfolio/customer_portfolio.html', {'customers': customer,
                                                                  'investments': investments,
                                                                  'stocks': stocks,
                                                                  'sum_acquired_value': sum_acquired_value[
@@ -251,31 +252,30 @@ def portfolio_pdf(request, pk):
         print(type(int(stock.initial_stock_value())))
         print("sum_of_initial_stock_value " + str(sum_of_initial_stock_value))
 
-    overall_stocks_results = float(sum_current_stocks_value) - float(sum_of_initial_stock_value)
-    print("overall_stocks_results" + str(overall_stocks_results))
-    context = {'customers': customer,
-               'investments': investments,
-               'stocks': stocks,
-               'sum_acquired_value': sum_acquired_value['acquired_value__sum'],
-               'sum_recent_value': sum_recent_value['recent_value__sum'],
-               'sum_current_stocks_value': sum_current_stocks_value,
-               'sum_of_initial_stock_value': sum_of_initial_stock_value,
-               'overall_investment_results': overall_investment_results,
-               'overall_stocks_results': overall_stocks_results,
-               }
-
-    html = template.render(context)
-    pdf = render_to_pdf('portfolio/customer_portfolio_pdf.html', context)
-    if pdf:
-        response = HttpResponse(pdf, content_type='application/customer_portfolio_pdf')
-        filename = 'Portfolio_' + str(customer.name) + '.pdf'
-        content = "inline; filename='%s'" % (filename)
-        download = request.GET.get("download")
-        if download:
-            content = "attachment; filename='%s'" % filename
-        response['Content-Disposition'] = content
-        return response
-    return HttpResponse("not found")
+        overall_stocks_results = float(sum_current_stocks_value) - float(sum_of_initial_stock_value)
+        print("overall_stocks_results" + str(overall_stocks_results))
+        context = {'customers': customer,
+                   'investments': investments,
+                   'stocks': stocks,
+                   'sum_acquired_value': sum_acquired_value['acquired_value__sum'],
+                   'sum_recent_value': sum_recent_value['recent_value__sum'],
+                   'sum_current_stocks_value': sum_current_stocks_value,
+                   'sum_of_initial_stock_value': sum_of_initial_stock_value,
+                   'overall_investment_results': overall_investment_results,
+                   'overall_stocks_results': overall_stocks_results,
+                   }
+        html = template.render(context)
+        pdf = render_to_pdf('portfolio/customer_portfolio_pdf.html', context)
+        if pdf:
+            response = HttpResponse(pdf, content_type='application/pdf')
+            filename = 'Portfolio_' + str(customer.name) + '.pdf'
+            content = "inline; filename='%s'" % filename
+            download = request.GET.get("download")
+            if download:
+                content = "attachment; filename='%s'" % filename
+                response['Content-Disposition'] = content
+            return response
+        return HttpResponseNotFound("not found")
 
 
 @login_required
@@ -298,7 +298,7 @@ def email(request, pk):
     customer = get_object_or_404(Customer, pk=pk)
     print(customer)
     if request.method == "POST":
-        form = EmailForm(request.POST,request.FILES)
+        form = EmailForm(request.POST, request.FILES)
         if form.is_valid():
             post = form.save(commit=False)
             post.published_date = timezone.now()
@@ -311,7 +311,7 @@ def email(request, pk):
             recipient_list = [email]
             email = EmailMessage(subject, message, email_from, recipient_list)
             base_dir = '/Users/rajeshkumarpanigrahi/Downloads/'
-            email.attach_file('/Users/rajeshkumarpanigrahi/Downloads/'+str(document))
+            email.attach_file('/Users/rajeshkumarpanigrahi/Downloads/' + str(document))
             email.send()
             return render(request, 'portfolio/sent.html')
     else:
